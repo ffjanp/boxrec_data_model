@@ -72,6 +72,17 @@ class Boxer_Completion:
                         line[self.schema[y]] = self.boxers[line[2]][y]
                     if line[self.schema[y]+1] == 'None' and y in self.boxers[line[3]]:
                         line[self.schema[y]+1] = self.boxers[line[3]][y]
+                if line[self.schema['age'] == 'None' and 'birth_year' in\
+                        self.boxers[line[2]]:
+                    line[self.schema['age']] = \
+                    str((int(line[schema['date']][0:4]) -\
+                    int(self.boxers[line[2]]['birth_year']))
+                if (line[self.schema['age'] == 'None' and 'birth_year' in
+                        self.boxers[line[3]]):
+                    line[self.schema['age']] = str((int(line[schema['date']][0:4]) -
+                         int(self.boxers[line[3]]['birth_year']))
+                                                                             
                 for x in line:
                     writing.write(x + '\t')
                 writing.write('\n')
+
