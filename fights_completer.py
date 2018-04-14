@@ -36,19 +36,42 @@ class Boxer_Completion:
                elif 'birth_year' in boxer_left:
                    year = (int(fight[self.schema['date']][0:4]) -
                                 int(fight[self.schema['age']]))
-                   boxer_left['birth_year'].append(year)
+                   boxer_left['birth_year'].append(str(year))
                else:                      
                    year= (int(fight[self.schema['date']][0:4]) -
                                 int(fight[self.schema['age']]))
-                   boxer_left['birth_year'] = [year]
+                   boxer_left['birth_year'] = [str(year)]
                if (fight[self.schema['date']] == 'None' or
                     fight[self.schema['age']+1] == 'None'):
                    pass
                elif 'birth_year' in boxer_right:
                    year = (int(fight[self.schema['date']][0:4]) -
                                 int(fight[self.schema['age']+1]))
-                   boxer_right['birth_year'].append(year)
+                   boxer_right['birth_year'].append(str(year))
                else:                      
                    year= (int(fight[self.schema['date']][0:4]) -
                                 int(fight[self.schema['age']+1]))
-                   boxer_right['birth_year'] = [year]
+                   boxer_right['birth_year'] = [str(year)]
+        
+        for x in self.boxers:
+            boxer = self.boxers[x]
+            for y in boxer:
+                if y  != 'stance':
+                    boxer[y] = str(sum(map(lambda x: int(x),boxer[y]))//\
+                    len(boxer[y]))
+                else:
+                    boxer[y] = boxer[y][-1]
+                
+    def write_to_file(self,writing_file):
+        fights = open(self.boxing_data, 'r')
+        with open(writing_file, 'w') as writing:
+            for line in fights:
+                line = line.split('\t')
+                for y in ['reach','height','stance']:
+                    if line[self.schema[y]] == 'None' and y in self.boxers[line[2]]:
+                        line[self.schema[y]] = self.boxers[line[2]][y]
+                    if line[self.schema[y]+1] == 'None' and y in self.boxers[line[3]]:
+                        line[self.schema[y]+1] = self.boxers[line[3]][y]
+                for x in line:
+                    writing.write(x + '\t')
+                writing.write('\n')
