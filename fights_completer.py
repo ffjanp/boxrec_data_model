@@ -65,24 +65,26 @@ class Boxer_Completion:
     def write_to_file(self,writing_file):
         fights = open(self.boxing_data, 'r')
         with open(writing_file, 'w') as writing:
+            i = 0
             for line in fights:
                 line = line.split('\t')
                 for y in ['reach','height','stance']:
                     if line[self.schema[y]] == 'None' and y in self.boxers[line[2]]:
+                        i += 1
                         line[self.schema[y]] = self.boxers[line[2]][y]
                     if line[self.schema[y]+1] == 'None' and y in self.boxers[line[3]]:
+                        i += 1
                         line[self.schema[y]+1] = self.boxers[line[3]][y]
-                if line[self.schema['age'] == 'None' and 'birth_year' in\
-                        self.boxers[line[2]]:
-                    line[self.schema['age']] = \
-                    str((int(line[schema['date']][0:4]) -\
-                    int(self.boxers[line[2]]['birth_year']))
-                if (line[self.schema['age'] == 'None' and 'birth_year' in
-                        self.boxers[line[3]]):
-                    line[self.schema['age']] = str((int(line[schema['date']][0:4]) -
+
+                    if line[8] == 'None'  and 'birth_year' in self.boxers[line[2]]:
+                        line[self.schema['age']] = \
+                            str(int(line[19][0:4]) -\
+                            int(self.boxers[line[2]]['birth_year']))
+                    if line[9] == 'None' and 'birth_year' in self.boxers[line[3]]:
+                        i =i+ 1     
+                        line[9] = str(int(line[19][0:4])-\
                          int(self.boxers[line[3]]['birth_year']))
-                                                                             
                 for x in line:
                     writing.write(x + '\t')
                 writing.write('\n')
-
+            print(i)
